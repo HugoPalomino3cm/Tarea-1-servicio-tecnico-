@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 // Menú principal
 void mostrarMenuPrincipal() {
@@ -23,6 +24,7 @@ typedef struct{
   char ID[10];            // ID del cliente
   char descripcion[100];  // Descripción del problema del dispositivo
   unsigned short prioridad; // Prioridad del servicio
+  time_t hora_ingresada;
 } tipoRegistro;
 
 void registrar_Cliente(List *clientes) {
@@ -34,6 +36,7 @@ void registrar_Cliente(List *clientes) {
   printf("Ingrese descripción del problema del dispositivo\n");
   scanf(" %99[^\n]s", &registroNuevo->descripcion);
   
+  time(&registroNuevo->hora_ingresada);
   registroNuevo->prioridad = 3; // Valor por defecto de prioridad
 
   list_pushBack(clientes, registroNuevo);
@@ -46,6 +49,7 @@ void mostrar_lista_clientes(List *clientes) {
     printf("ID: %s\n", actual->ID);
     printf("Descripción del problema: %s\n", actual->descripcion);
     printf("Prioridad: %d\n\n", actual->prioridad);
+    printf("Hora ingresada %s",ctime(&actual->hora_ingresada));
     actual = list_next(clientes);
   }
 }
