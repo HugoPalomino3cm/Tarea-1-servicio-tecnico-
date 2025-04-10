@@ -28,16 +28,17 @@ typedef struct{
 } tipoRegistro;
 
 void registrar_Cliente(List *clientes) {
-  printf("Registrar nuevo cliente\n");
+  printf("Registrar nuevo cliente\n\n");
   tipoRegistro *registroNuevo = malloc(sizeof(tipoRegistro));
   if (registroNuevo == NULL) return;
   printf("Ingrese ID del cliente\n");
   scanf(" %9[^\n]s", &registroNuevo->ID);
   printf("Ingrese descripción del problema del dispositivo\n");
   scanf(" %99[^\n]s", &registroNuevo->descripcion);
+  printf("\n");
   
   time(&registroNuevo->hora_ingresada);
-  registroNuevo->prioridad = 3; // Valor por defecto de prioridad
+  registroNuevo->prioridad = 3; // Valor por defecto de prioridad establecido como 'baja prioridad'
 
   list_pushBack(clientes, registroNuevo);
 }
@@ -48,8 +49,8 @@ void mostrar_lista_clientes(List *clientes) {
   while(actual != NULL){
     printf("ID: %s\n", actual->ID);
     printf("Descripción del problema: %s\n", actual->descripcion);
-    printf("Prioridad: %d\n\n", actual->prioridad);
-    printf("Hora ingresada %s",ctime(&actual->hora_ingresada));
+    printf("Prioridad: %d", actual->prioridad);
+    printf("Hora ingresada %s\n\n",ctime(&actual->hora_ingresada));
     actual = list_next(clientes);
   }
 }
@@ -96,6 +97,66 @@ void asignar_prioridad(List *clientes) {
   list_pushBack(clientes, actual);
 }
 
+tipoRegistro *eliminar_ticket(List *clientes) {
+
+  if (list_first(clientes) == NULL) {
+      return NULL;
+  }
+
+  tipoRegistro *actual = list_first(clientes);
+  tipoRegistro *ticket_a_eliminar = actual;
+  unsigned short mayor_prioridad = actual->prioridad;
+  time_t hora_mas_antigua = actual->hora_ingresada;
+
+  while (actual != NULL) {
+      if (actual->prioridad < mayor_prioridad) {
+          mayor_prioridad = actual->prioridad;
+          hora_mas_antigua = actual->hora_ingresada;
+          ticket_a_eliminar = actual;
+      }
+      else if (actual->prioridad == mayor_prioridad) {
+          if (actual->hora_ingresada < hora_mas_antigua) {
+              hora_mas_antigua = actual->hora_ingresada;
+              ticket_a_eliminar = actual;
+          }
+      }
+      actual = list_next(clientes);
+  }
+
+  actual = list_first(clientes);
+  while (actual != NULL) {
+      if (actual == ticket_a_eliminar) {
+          list_popCurrent(clientes);
+          break;
+      }
+      actual = list_next(clientes);
+  }
+
+  return ticket_a_eliminar;
+}
+
+void atender_clientes(List *clientes) {
+  limpiarPantalla();
+
+  tipoRegistro *ticket_atendido = eliminar_ticket(clientes);
+  
+  if (ticket_atendido == NULL) {
+      printf("No hay tickets pendientes en la lista\n");
+  } else {
+      printf("Ticket atendido:\n");
+      printf("ID: %s\n", ticket_atendido->ID);
+      printf("Descripción del problema: %s\n", ticket_atendido->descripcion);
+      printf("Prioridad: %d\n", ticket_atendido->prioridad);
+      printf("Hora de registro: %s", ctime(&ticket_atendido->hora_ingresada));
+      
+      free(ticket_atendido);
+
+      printf("\nTicket procesado exitosamente.\n");
+  }
+  
+  presioneTeclaParaContinuar();
+}
+
 int main() {
   char opcion;
   List *clientes = list_create(); // Lista para gestionar clientes
@@ -117,7 +178,7 @@ int main() {
       mostrar_lista_clientes(clientes);
       break;
     case '4':
-      // Lógica para atender al siguiente cliente
+      atender_clientes(clientes);
       break;
     case '5':
       // Lógica para mostrar clientes por prioridad
@@ -128,8 +189,7 @@ int main() {
     default:
       puts("Opción no válida. Por favor, intente de nuevo.");
     }
-    presioneTeclaParaContinuar();
-
+    //presioneTeclaParaContinuar();
   } while (opcion != '6');
 
   // Liberar recursos, si es necesario
