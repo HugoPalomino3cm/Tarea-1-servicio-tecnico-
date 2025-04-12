@@ -82,8 +82,13 @@ List *split_string(const char *str, const char *delim) {
 }
 
 // Función para limpiar la pantalla
-void limpiarPantalla() { system("clear"); }
-
+void limpiarPantalla() {
+  #if defined(_WIN32) || defined(_WIN64) //Si el SO es windows de 32 o 64 bits ejecuta "cls"
+      system("cls");  // Windows
+  #else
+      system("clear");  // De no ser windows ejecuta "clear"
+  #endif
+}
 void presioneTeclaParaContinuar() {
   puts("Presione una tecla para continuar...");
   getchar(); // Consume el '\n' del buffer de entrada

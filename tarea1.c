@@ -1,199 +1,209 @@
-#include "tdas/list.h"
+#include "tdas/list.h" 
 #include "tdas/extra.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <ctype.h>
 
-// Menú principal
+typedef struct {
+  char idCliente[10];
+  char descripcionProblema[100];
+  char nivelPrioridad[10];
+  time_t tiempoRegistro;
+} Cliente;
+
 void mostrarMenuPrincipal() {
   limpiarPantalla();
-  puts("========================================");
-  puts("     Sistema de Servicio Técnico");
-  puts("========================================");
-
+  puts("===== Sistema de Servicio Técnico =====");
   puts("1) Registrar cliente");
-  puts("2) Asignar prioridad a cliente");
+  puts("2) Asignar prioridad");
   puts("3) Mostrar lista de espera");
-  puts("4) Atender al siguiente cliente");
-  puts("5) Mostrar clientes por prioridad");
+  puts("4) Atender cliente");
+  puts("5) Buscar cliente por ID");
   puts("6) Salir");
 }
 
-typedef struct{
-  char ID[10];            // ID del cliente
-  char descripcion[100];  // Descripción del problema del dispositivo
-  unsigned short prioridad; // Prioridad del servicio
-  time_t hora_ingresada;
-} tipoRegistro;
+int obtenerValorPrioridad(const char *prioridad) {
+  if (strcmp(prioridad, "alta") == 0) return 1;
+  if (strcmp(prioridad, "media") == 0) return 2;
+  return 3; // baja
+}
 
-void registrar_Cliente(List *clientes) {
-  printf("Registrar nuevo cliente\n\n");
-  tipoRegistro *registroNuevo = malloc(sizeof(tipoRegistro));
-  if (registroNuevo == NULL) return;
-  printf("Ingrese ID del cliente\n");
-  scanf(" %9[^\n]s", &registroNuevo->ID);
-  printf("Ingrese descripción del problema del dispositivo\n");
-  scanf(" %99[^\n]s", &registroNuevo->descripcion);
-  printf("\n");
+void convertirTextoAMinusculas(char *texto) {
+  for (int i = 0; texto[i]; i++) texto[i] = tolower(texto[i]);
+}
+
+int compararClientesPorPrioridadYHora(void *a, void *b) {
+  Cliente *clienteA = (Cliente *)a;
+  Cliente *clienteB = (Cliente *)b;
+
+  int prioridadA = obtenerValorPrioridad(clienteA->nivelPrioridad);
+  int prioridadB = obtenerValorPrioridad(clienteB->nivelPrioridad);
+
+  if (prioridadA != prioridadB)
+    return prioridadA < prioridadB;
+
+  return clienteA->tiempoRegistro < clienteB->tiempoRegistro;
+}
+
+
+
+void registrarNuevoCliente(List *listaClientes) {
+  char idIngresado[10];
+  printf("\nIngrese ID: ");
+  scanf(" %9[^\n]", idIngresado); getchar();
   
-  time(&registroNuevo->hora_ingresada);
-  registroNuevo->prioridad = 3; // Valor por defecto de prioridad establecido como 'baja prioridad'
+  Cliente *clienteActual = list_first(listaClientes);
 
-  list_pushBack(clientes, registroNuevo);
-}
-
-void mostrar_lista_clientes(List *clientes) {
-  printf("Clientes en espera: \n\n");
-  tipoRegistro *actual = list_first(clientes);
-  while(actual != NULL){
-    printf("ID: %s\n", actual->ID);
-    printf("Descripción del problema: %s\n", actual->descripcion);
-    printf("Prioridad: %d", actual->prioridad);
-    printf("Hora ingresada %s\n\n",ctime(&actual->hora_ingresada));
-    actual = list_next(clientes);
+  while (clienteActual != NULL) {
+    if (strcmp(clienteActual->idCliente, idIngresado) == 0) break;
+    clienteActual = list_next(listaClientes);
   }
-}
-
-void asignar_prioridad(List *clientes) {
-  unsigned short prioridad_nueva;
-  char ID[10];
-  printf("Ingrese el ID del cliente que quiere modificar: ");
-  scanf(" %9[^\n]", ID);
-  printf("Ingrese la nueva prioridad (1: alta, 2: media, 3: baja): ");
-  scanf("%hu", &prioridad_nueva);
-
-  tipoRegistro *actual = list_first(clientes);
-
-  while(actual != NULL){
-    if(strcmp(actual->ID, ID) == 0) break;
-    actual = list_next(clientes);
-  }
-
-  if(actual != NULL){
-    actual->prioridad = prioridad_nueva;
-    list_popCurrent(clientes);
-    printf("Prioridad del cliente actualizada con éxito.\n");
-  }
-  else{
-    printf("Cliente no encontrado.\n");
+  
+  if (clienteActual != NULL){
     return;
   }
 
-  tipoRegistro *aux = list_first(clientes);
+  Cliente *nuevoCliente = malloc(sizeof(Cliente));
+  if (!nuevoCliente) return;
 
-  while(aux != NULL){
-    if(aux->prioridad > prioridad_nueva){
-      if(aux == list_first(clientes)){
-        list_pushFront(clientes, actual);
-      } else {
-        list_pushCurrent(clientes, actual);
-      }
+  strcpy(nuevoCliente->idCliente, idIngresado);
+  printf("Descripción del problema: ");
+  scanf(" %99[^\n]", nuevoCliente->descripcionProblema); getchar();
+
+  time(&nuevoCliente->tiempoRegistro);
+  strcpy(nuevoCliente->nivelPrioridad, "baja");
+
+  list_sortedInsert(listaClientes, nuevoCliente, compararClientesPorPrioridadYHora);
+  printf("Cliente registrado con prioridad 'baja'.\n");
+  presioneTeclaParaContinuar();
+}
+
+
+void mostrarListaClientes(List *listaClientes) {
+  limpiarPantalla();
+  Cliente *cliente = list_first(listaClientes);
+  if (!cliente) {
+    printf("No hay clientes en espera.\n");
+  }
+
+  while (cliente) {
+    char horaFormateada[9];
+    strftime(horaFormateada, sizeof(horaFormateada), "%H:%M:%S", localtime(&cliente->tiempoRegistro));
+    printf("ID: %s\nDescripción: %s\nPrioridad: %s\nHora de ingreso: %s\n\n",
+           cliente->idCliente, cliente->descripcionProblema, cliente->nivelPrioridad, horaFormateada);
+    cliente = list_next(listaClientes);
+  }
+  presioneTeclaParaContinuar();
+}
+
+void actualizarPrioridadCliente(List *listaClientes) {
+  char idBuscado[10], nuevaPrioridad[10];
+  printf("ID del cliente: ");
+  scanf(" %9[^\n]", idBuscado); 
+  getchar();
+  printf("Nueva prioridad (alta, media, baja): ");
+  scanf(" %9[^\n]", nuevaPrioridad); 
+  getchar();
+  convertirTextoAMinusculas(nuevaPrioridad);
+
+  if (strcmp(nuevaPrioridad, "alta") && strcmp(nuevaPrioridad, "media") && strcmp(nuevaPrioridad, "baja")) {
+    printf("Prioridad inválida.\n");
+    presioneTeclaParaContinuar();
+    return;
+  }
+
+  Cliente *cliente = list_first(listaClientes);
+  while (cliente) {
+    if (strcmp(cliente->idCliente, idBuscado) == 0) {
+      list_popCurrent(listaClientes);
+      strcpy(cliente->nivelPrioridad, nuevaPrioridad);
+      list_sortedInsert(listaClientes, cliente, compararClientesPorPrioridadYHora);
+      printf("Prioridad actualizada.\n");
+      presioneTeclaParaContinuar();
       return;
     }
-    aux = list_next(clientes);
+    cliente = list_next(listaClientes);
   }
 
-  list_pushBack(clientes, actual);
+  printf("Cliente no encontrado.\n");
+  presioneTeclaParaContinuar();
 }
 
-tipoRegistro *eliminar_ticket(List *clientes) {
-
-  if (list_first(clientes) == NULL) {
-      return NULL;
+void atenderClienteConMayorPrioridad(List *listaClientes) {
+  Cliente *cliente = list_first(listaClientes);
+  if (!cliente) {
+    printf("No hay clientes en espera.\n");
+    presioneTeclaParaContinuar();
+    return;
   }
 
-  tipoRegistro *actual = list_first(clientes);
-  tipoRegistro *ticket_a_eliminar = actual;
-  unsigned short mayor_prioridad = actual->prioridad;
-  time_t hora_mas_antigua = actual->hora_ingresada;
-
-  while (actual != NULL) {
-      if (actual->prioridad < mayor_prioridad) {
-          mayor_prioridad = actual->prioridad;
-          hora_mas_antigua = actual->hora_ingresada;
-          ticket_a_eliminar = actual;
-      }
-      else if (actual->prioridad == mayor_prioridad) {
-          if (actual->hora_ingresada < hora_mas_antigua) {
-              hora_mas_antigua = actual->hora_ingresada;
-              ticket_a_eliminar = actual;
-          }
-      }
-      actual = list_next(clientes);
-  }
-
-  actual = list_first(clientes);
-  while (actual != NULL) {
-      if (actual == ticket_a_eliminar) {
-          list_popCurrent(clientes);
-          break;
-      }
-      actual = list_next(clientes);
-  }
-
-  return ticket_a_eliminar;
+  list_popFront(listaClientes);
+  printf("Cliente atendido:\nID: %s\nDescripción: %s\nPrioridad: %s\n",
+         cliente->idCliente, cliente->descripcionProblema, cliente->nivelPrioridad);
+  free(cliente);
+  presioneTeclaParaContinuar();
 }
 
-void atender_clientes(List *clientes) {
-  limpiarPantalla();
+void buscarClientePorID(List *listaClientes) {
+  char idBuscado[10];
+  printf("Ingrese el ID del cliente: ");
+  scanf(" %9[^\n]", idBuscado); getchar();
 
-  tipoRegistro *ticket_atendido = eliminar_ticket(clientes);
-  
-  if (ticket_atendido == NULL) {
-      printf("No hay tickets pendientes en la lista\n");
-  } else {
-      printf("Ticket atendido:\n");
-      printf("ID: %s\n", ticket_atendido->ID);
-      printf("Descripción del problema: %s\n", ticket_atendido->descripcion);
-      printf("Prioridad: %d\n", ticket_atendido->prioridad);
-      printf("Hora de registro: %s", ctime(&ticket_atendido->hora_ingresada));
-      
-      free(ticket_atendido);
-
-      printf("\nTicket procesado exitosamente.\n");
+  Cliente *cliente = list_first(listaClientes);
+  while (cliente) {
+    if (strcmp(cliente->idCliente, idBuscado) == 0) {
+      char horaFormateada[9];
+      strftime(horaFormateada, sizeof(horaFormateada), "%H:%M:%S", localtime(&cliente->tiempoRegistro));
+      printf("\nCliente encontrado:\n");
+      printf("ID: %s\n", cliente->idCliente);
+      printf("Descripción: %s\n", cliente->descripcionProblema);
+      printf("Prioridad: %s\n", cliente->nivelPrioridad);
+      printf("Hora de registro: %s\n", horaFormateada);
+      presioneTeclaParaContinuar();
+      return;
+    }
+    cliente = list_next(listaClientes);
   }
-  
+
+  printf("No se encontró ningún cliente con ese ID.\n");
   presioneTeclaParaContinuar();
 }
 
 int main() {
+  List *listaClientes = list_create();
   char opcion;
-  List *clientes = list_create(); // Lista para gestionar clientes
-  
+
   do {
     mostrarMenuPrincipal();
-    printf("Ingrese su opción: ");
-    scanf(" %c", &opcion); // Nota el espacio antes de %c para consumir el
-                           // newline anterior
+    printf("Opción: ");
+    scanf(" %c", &opcion); getchar();
 
     switch (opcion) {
-    case '1':
-      registrar_Cliente(clientes);
-      break;
-    case '2':
-      asignar_prioridad(clientes);
-      break;
-    case '3':
-      mostrar_lista_clientes(clientes);
-      break;
-    case '4':
-      atender_clientes(clientes);
-      break;
-    case '5':
-      // Lógica para mostrar clientes por prioridad
-      break;
-    case '6':
-      puts("Saliendo del sistema de gestión de servicio técnico...");
-      break;
-    default:
-      puts("Opción no válida. Por favor, intente de nuevo.");
+      case '1': 
+        registrarNuevoCliente(listaClientes); 
+        break;
+      case '2': 
+        actualizarPrioridadCliente(listaClientes); 
+        break;
+      case '3': 
+        mostrarListaClientes(listaClientes); 
+        break;
+      case '4': 
+        atenderClienteConMayorPrioridad(listaClientes); 
+        break;
+      case '5': 
+        buscarClientePorID(listaClientes); 
+        break;
+      case '6': 
+        puts("Saliendo del sistema de gestión de servicio técnico...");
+        break;
+      default:
+        puts("Opción no válida. Por favor, intente de nuevo.");
     }
-    //presioneTeclaParaContinuar();
   } while (opcion != '6');
 
-  // Liberar recursos, si es necesario
-  list_clean(clientes);
-
+  list_clean(listaClientes);
   return 0;
 }
