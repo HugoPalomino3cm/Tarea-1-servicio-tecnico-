@@ -8,6 +8,10 @@
 4) Sistema operativo (Windows, Linux o macOS)
 5) Visual Studio Code
 
+### Funcionalidad del sistema 'Descripción general'
+
+Este sistema permite gestionar la atención de clientes en un servicio técnico, priorizando su atención según el nivel de urgencia del problema reportado.
+
 ### Compilar el programa:
 
 1) Abre Visual Studio Code (VSCode):
@@ -24,20 +28,23 @@
    - Para que empiece a compilar el codigo = `./tarea1`
 
 
-### Funcionalidad del sistema 'Descripción general'
+### Uso de programa:
 
-Este sistema permite gestionar la atención de clientes en un servicio técnico, priorizando su atención según el nivel de urgencia del problema reportado.
+1) **Registrar cliente nuevo:**
+      -Ingresa el ID y la descripción del problema.
+      `Puedes registrar varios clientes pero tiene que ser uno por uno.`
 
-### Funcionalidades principales
+2) **Asignar prioridad:**
+      -Escribe el ID del cliente y `cambia su prioridad a alta, media o baja.` si es que se encuentra el ID
 
-1) Registrar cliente nuevo: Agrega un nuevo cliente a la lista de espera con prioridad inicial baja.
+3) **Mostrar lista de espera:**
+      -Muestra todos los clientes, ordenados por prioridad y hora de llegada.
+   
+4) **Atender cliente:**
+      -Atiende al cliente con mayor prioridad. Si hay empate, se atiende al más antiguo.
 
-2) Asignar prioridad: Cambia el nivel de prioridad (alta, media, baja) de un cliente existente.
+5) **Buscar cliente por ID:**
+      -Busca un cliente específico por su ID y muestra sus datos.
 
-3) Mostrar lista de espera: Muestra todos los clientes en espera, ordenados por prioridad y hora de llegada.
-
-4) Atender cliente: Atiende al cliente con mayor prioridad (y más antiguo en caso de empate).
-
-5) Buscar cliente por ID: Permite buscar a un cliente específico mediante su identificador.
-
-6) Salir: Finaliza el programa.
+6) **Salir:**
+      -Finaliza el programa.
