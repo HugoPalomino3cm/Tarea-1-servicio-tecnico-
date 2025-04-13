@@ -32,7 +32,7 @@ Este sistema permite gestionar la atención de clientes en un servicio técnico,
 
 ### Ejemplo de Uso
 
-A continuación, se presenta un ejemplo de cómo interactuar con el sistema de servicio técnico:
+Un ejemplo de cómo interactuar con el sistema de servicio técnico:
 
 ---
 
