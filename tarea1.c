@@ -16,7 +16,6 @@
 #define CYAN    "\x1b[36m"
 #define BOLD    "\x1b[1m"
 
-
 // Estructura de cliente 
 typedef struct {
   char idCliente[10];
@@ -41,19 +40,19 @@ void mostrarMenuPrincipal() {
   printf("\n" BOLD "Seleccione una opción: " RESET);
 }
 
-// Convierte una prioridad (alta, media, baja) en un valor numérico (1, 2, 3) para ordenar
+// Asigna un número a la prioridad para comparar más fácil
 int obtenerValorPrioridad(const char *prioridad) {
   if (strcmp(prioridad, "alta") == 0) return 1;
   if (strcmp(prioridad, "media") == 0) return 2;
   return 3; // baja
 }
 
-// Convierte una cadena de texto a minúsculas para facilitar comparaciones
+// Pasa un texto a minúsculas para no preocuparse por mayúsculas
 void convertirTextoAMinusculas(char *texto) {
   for (int i = 0; texto[i]; i++) texto[i] = tolower(texto[i]);
 }
 
-// Compara clientes por prioridad (menor valor primero) y, si es igual por tiempo de registro (más antiguo primero)
+// Compara clientes primero por prioridad y luego por hora de llegada
 int compararClientesPorPrioridadYHora(void *a, void *b) {
   Cliente *clienteA = (Cliente *)a;
   Cliente *clienteB = (Cliente *)b;
@@ -67,14 +66,14 @@ int compararClientesPorPrioridadYHora(void *a, void *b) {
   return clienteA->tiempoRegistro < clienteB->tiempoRegistro;
 }
 
-// Registra a un nuevo cliente con ID único, descripción y prioridad baja, verificando duplicados y ordenando la lista
+// Agrega un cliente nuevo con sus datos y lo pone en la lista ordenada
 void registrarNuevoCliente(List *listaClientes) {
   char idIngresado[10];
   printf(BOLD "\nIngrese ID 'SIN GUION': " RESET);
   scanf(" %9[^\n]", idIngresado); 
   getchar();
 
-
+  // Revisa si el ID ya existe
   Cliente *clienteActual = list_first(listaClientes);
   while (clienteActual != NULL) {
     if (strcmp(clienteActual->idCliente, idIngresado) == 0) {
@@ -85,7 +84,7 @@ void registrarNuevoCliente(List *listaClientes) {
     clienteActual = list_next(listaClientes);
   }
 
-
+  // Crea el cliente y pide sus datos
   Cliente *nuevoCliente = malloc(sizeof(Cliente));
   
   if (!nuevoCliente) return;
@@ -97,12 +96,13 @@ void registrarNuevoCliente(List *listaClientes) {
   time(&nuevoCliente->tiempoRegistro);
   strcpy(nuevoCliente->nivelPrioridad, "baja");
 
+  // Lo inserta en el orden correcto
   list_sortedInsert(listaClientes, nuevoCliente, compararClientesPorPrioridadYHora);
   printf(GREEN "\nCliente registrado con prioridad 'baja'.\n" RESET);
   presioneTeclaParaContinuar();
 }
 
-// Muestra la lista de clientes en espera con ID, descripción, prioridad (con colores) y hora de registro
+// Enseña todos los clientes que están esperando
 void mostrarListaClientes(List *listaClientes) {
   limpiarPantalla();
   Cliente *cliente = list_first(listaClientes);
@@ -114,11 +114,12 @@ void mostrarListaClientes(List *listaClientes) {
 
   printf(BOLD CYAN "\nClientes en espera:\n\n" RESET);
 
+  // Recorre la lista y muestra cada cliente
   while (cliente) {
     char horaFormateada[9];
     strftime(horaFormateada, sizeof(horaFormateada), "%H:%M:%S", localtime(&cliente->tiempoRegistro));
 
-    // Prioridad con color sutil
+    // Cambia el color según la prioridad
     const char *color = "";
     if (strcmp(cliente->nivelPrioridad, "alta") == 0) color = RED;
     else if (strcmp(cliente->nivelPrioridad, "media") == 0) color = YELLOW;
@@ -135,23 +136,25 @@ void mostrarListaClientes(List *listaClientes) {
   presioneTeclaParaContinuar();
 }
 
-// Actualiza la prioridad de un cliente por ID, valida la entrada y reordena la lista
+// Cambia la prioridad de un cliente y reordena la lista
 void actualizarPrioridadCliente(List *listaClientes) {
   char idBuscado[10], nuevaPrioridad[10];
   printf("ID del cliente: ");
   scanf(" %9[^\n]", idBuscado); 
   getchar();
-  printf("Nueva prioridad (alta, media, baja): ");
+  printf("Escriba la nueva prioridad (alta, media, baja): ");
   scanf(" %9[^\n]", nuevaPrioridad); 
   getchar();
   convertirTextoAMinusculas(nuevaPrioridad);
 
+  // Verifica que la prioridad sea válida
   if (strcmp(nuevaPrioridad, "alta") && strcmp(nuevaPrioridad, "media") && strcmp(nuevaPrioridad, "baja")) {
     printf("Prioridad inválida.\n");
     presioneTeclaParaContinuar();
     return;
   }
 
+  // Busca el cliente y actualiza su prioridad
   Cliente *cliente = list_first(listaClientes);
   while (cliente) {
     if (strcmp(cliente->idCliente, idBuscado) == 0) {
@@ -169,7 +172,7 @@ void actualizarPrioridadCliente(List *listaClientes) {
   presioneTeclaParaContinuar();
 }
 
-// Atiende al cliente con mayor prioridad (primero en la lista), lo elimina y muestra sus datos
+// Atiende al cliente más importante y lo saca de la lista
 void atenderClienteConMayorPrioridad(List *listaClientes) {
   Cliente *cliente = list_first(listaClientes);
   if (!cliente) {
@@ -178,6 +181,7 @@ void atenderClienteConMayorPrioridad(List *listaClientes) {
     return;
   }
 
+  // Muestra quién fue atendido y libera memoria
   list_popFront(listaClientes);
   printf("Cliente atendido:\nID: %s\nDescripción: %s\nPrioridad: %s\n",
          cliente->idCliente, cliente->descripcionProblema, cliente->nivelPrioridad);
@@ -185,12 +189,13 @@ void atenderClienteConMayorPrioridad(List *listaClientes) {
   presioneTeclaParaContinuar();
 }
 
-// Busca un cliente por ID y muestra sus datos (ID, descripción, prioridad, hora) si existe
+// Busca un cliente por su ID y muestra toda su info
 void buscarClientePorID(List *listaClientes) {
   char idBuscado[10];
   printf("Ingrese el ID del cliente: ");
   scanf(" %9[^\n]", idBuscado); getchar();
 
+  // Revisa si el cliente existe
   Cliente *cliente = list_first(listaClientes);
   while (cliente) {
     if (strcmp(cliente->idCliente, idBuscado) == 0) {
@@ -216,6 +221,7 @@ int main() {
   List *listaClientes = list_create();
   char opcion;
 
+  // Bucle principal con el menú
   do {
     mostrarMenuPrincipal();
     printf("Opción: ");
@@ -245,6 +251,7 @@ int main() {
     }
   } while (opcion != '6');
 
+  // Limpia la lista antes de terminar
   list_clean(listaClientes);
   return 0;
 }
