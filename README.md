@@ -1,31 +1,32 @@
-# Tarea-1-servicio-tecnico-
-## Pasos para compilar y ejecutar el programa
+# Tarea 1: Sistema de Servicio Técnico
 
-### Requisitos Previos:
-1) Git instalado
-2) Compilador GCC
-3) PowerShell
-4) Sistema operativo (Windows, Linux o macOS)
-5) Visual Studio Code
+## Pasos para Compilar y Ejecutar el Programa
 
-### Funcionalidad del sistema 'Descripción general'
+### Requisitos Previos
+- **Git** instalado.
+- **Compilador GCC**.
+- **PowerShell** (para Windows; opcional para Linux/macOS).
+- Sistema operativo: Windows, Linux o macOS.
+- **Visual Studio Code** (recomendado).
 
+### Descripción General del Sistema
 Este sistema permite gestionar la atención de clientes en un servicio técnico, priorizando su atención según el nivel de urgencia del problema reportado.
 
-### Compilar el programa:
+### Instrucciones para Compilar
 
-1) Abre Visual Studio Code (VSCode):
+1. **Clonar el Repositorio en Visual Studio Code (VSCode):**
    - Asegúrate de tener la extensión de Git instalada en VSCode.
-   - Haz clic en la pestaña de "Source Control" (Control de Código Fuente) en la barra lateral (ícono de Git).
-   - Selecciona "Clone Repository" e ingresa la URL del repositorio:`https://github.com/HugoPalomino3cm/Tarea-1-servicio-tecnico-.git`
+   - Haz clic en la pestaña "Source Control" (ícono de Git) en la barra lateral.
+   - Selecciona "Clone Repository" e ingresa la URL del repositorio:  
+     `https://github.com/HugoPalomino3cm/Tarea-1-servicio-tecnico-.git`
    - Elige una carpeta local para guardar el proyecto y abre la carpeta clonada en VSCode.
-2) Abre una terminal en VSCode o usa PowerShell:
-   - En VSCode, selecciona `Terminal -> New Terminal` para abrir una terminal integrada.
-   - Compila el programa ejecutando el siguiente comando en la terminal (genera el ejecutable):
-   - En PowerShell, ejecuta los siguientes comandos
-   - En la terminal ejecutar (nos genera el ejecutable) = `gcc -o tarea1 tarea1.c tdas/list.c tdas/extra.c`
-   - Para que el programa muestre correctamente las tildes = `$OutputEncoding = [Console]::OutputEncoding = [Text.UTF8Encoding]::new()`
-   - Para que empiece a compilar el codigo = `./tarea1`
+
+2. **Compilar el Programa:**
+   - Abre una terminal en VSCode (`Terminal -> New Terminal`) o usa PowerShell.
+   - Ejecuta los siguientes comandos en la terminal:
+     - Para generar el ejecutable:  
+       ```bash
+       gcc -o tarea1 tarea1.c tdas/list.c tdas/extra.c
 
 
 ## Uso del Programa
