@@ -34,7 +34,7 @@ Este sistema permite gestionar la atención de clientes en un servicio técnico,
          $OutputEncoding = [Console]::OutputEncoding = [Text.UTF8Encoding]::new()
       
       - Para ejecutar el programa:
-      ```bash
+       ```bash
           ./tarea1
 
 
