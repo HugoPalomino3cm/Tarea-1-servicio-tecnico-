@@ -10,7 +10,7 @@
 
 ### Compilar el programa:
 
-1) Abre Visual Studio Code (VSCode) y clona el repositorio:
+1) Abre Visual Studio Code (VSCode):
    - Asegúrate de tener la extensión de Git instalada en VSCode.
    - Haz clic en la pestaña de "Source Control" (Control de Código Fuente) en la barra lateral (ícono de Git).
    - Selecciona "Clone Repository" e ingresa la URL del repositorio:`https://github.com/HugoPalomino3cm/Tarea-1-servicio-tecnico-.git`
