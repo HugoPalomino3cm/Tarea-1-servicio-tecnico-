@@ -6,7 +6,7 @@
 2) Inicia sesión en tu cuenta de GitHub 
 
 ### Compilar el programa:
-    En PowerShell, ejecuta los siguientes comandos
+    **En PowerShell, ejecuta los siguientes comandos**
     -En la terminal ejecutar (nos genera el ejecutable) = gcc -o tarea1 tarea1.c tdas/list.c tdas/extra.c
     -Para que el programa muestre correctamente las tildes = $OutputEncoding = [Console]::OutputEncoding = [Text.UTF8Encoding]::new()
     -Para que empiece a compilar el codigo = ./tarea1
