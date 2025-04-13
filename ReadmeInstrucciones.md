@@ -1,11 +1,15 @@
 # Tarea-1-servicio-tecnico-
 ## Pasos para compilar y ejecutar el programa
 
-1) en la terminal ejecutar (nos genera el ejecutable) = gcc -o tarea1 tarea1.c tdas/list.c tdas/extra.c
+1) Clonar el repositorio desde GitHub:
+    -Asegúrate de tener git instalado.
+    -Inicia sesión en tu cuenta de GitHub 
 
-2) Para que el programa muestre correctamente las tildes = $OutputEncoding = [Console]::OutputEncoding = [Text.UTF8Encoding]::new()
-
-3) Para que empiece a compilar el codigo = ./tarea1
+2) Compilar el programa:
+    -En PowerShell, ejecuta los siguientes comandos
+    -En la terminal ejecutar (nos genera el ejecutable) = gcc -o tarea1 tarea1.c tdas/list.c tdas/extra.c
+    -Para que el programa muestre correctamente las tildes = $OutputEncoding = [Console]::OutputEncoding = [Text.UTF8Encoding]::new()
+    -Para que empiece a compilar el codigo = ./tarea1
 
 
 ## Funcionalidad del sistema 'Descripción general'
