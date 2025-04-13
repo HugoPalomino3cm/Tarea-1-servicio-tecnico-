@@ -35,16 +35,16 @@ Este sistema permite gestionar la atención de clientes en un servicio técnico,
    `Puedes registrar varios clientes, pero tiene que ser uno por uno.`
 
 2) **Asignar prioridad:**
-   -Escribe el ID del cliente y `cambia su prioridad a alta, media o baja.` si es que se encuentra el ID
+   -Escribe el ID del cliente y `cambia su prioridad a alta, media o baja.` (si es que se encuentra el ID).
 
 3) **Mostrar lista de espera:**
    -Muestra todos los clientes, ordenados por prioridad y hora de llegada.
    
 4) **Atender cliente:**
-   -Atiende al cliente con mayor prioridad. Si hay empate, se atiende al más antiguo `Hora de llegada`.
+   -Atiende al cliente con mayor prioridad. Si hay empate, se atiende al más antiguo `hora de llegada.`
 
 5) **Buscar cliente por ID:**
-   -Busca un cliente específico por su ID y muestra sus datos `Si es que se encuentra`.
+   -Busca un cliente específico por su ID y muestra sus datos `Si es que se encuentra.`
 
 6) **Salir:**
    -`Finaliza el programa.`
