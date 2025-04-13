@@ -30,7 +30,7 @@ Este sistema permite gestionar la atención de clientes en un servicio técnico,
           gcc -o tarea1 tarea1.c tdas/list.c tdas/extra.c
        
      - Para mostrar correctamente las tildes (en PowerShell):
-         ```bash
+       ```bash
          $OutputEncoding = [Console]::OutputEncoding = [Text.UTF8Encoding]::new()
       
       - Para ejecutar el programa:
