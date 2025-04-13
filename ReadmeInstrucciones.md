@@ -19,9 +19,9 @@
    - En VSCode, selecciona `Terminal -> New Terminal` para abrir una terminal integrada.
    - Compila el programa ejecutando el siguiente comando en la terminal (genera el ejecutable):
    - En PowerShell, ejecuta los siguientes comandos
-   - En la terminal ejecutar (nos genera el ejecutable) = gcc -o tarea1 tarea1.c tdas/list.c tdas/extra.c
-   - Para que el programa muestre correctamente las tildes = $OutputEncoding = [Console]::OutputEncoding = [Text.UTF8Encoding]::new()
-   - Para que empiece a compilar el codigo = ./tarea1
+   - En la terminal ejecutar (nos genera el ejecutable) = `gcc -o tarea1 tarea1.c tdas/list.c tdas/extra.c`
+   - Para que el programa muestre correctamente las tildes = `$OutputEncoding = [Console]::OutputEncoding = [Text.UTF8Encoding]::new()`
+   - Para que empiece a compilar el codigo = `./tarea1`
 
 
 ### Funcionalidad del sistema 'Descripción general'
