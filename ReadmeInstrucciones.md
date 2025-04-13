@@ -13,10 +13,10 @@
 1) Abre Visual Studio Code (VSCode) y clona el repositorio:
    - Asegúrate de tener la extensión de Git instalada en VSCode.
    - Haz clic en la pestaña de "Source Control" (Control de Código Fuente) en la barra lateral (ícono de Git).
-   - Selecciona "Clone Repository"
+   - Selecciona "Clone Repository" e ingresa la URL del repositorio:`https://github.com/HugoPalomino3cm/Tarea-1-servicio-tecnico-.git`.
    - Elige una carpeta local para guardar el proyecto y abre la carpeta clonada en VSCode.
 2) Abre una terminal en VSCode o usa PowerShell:
-   - En VSCode, selecciona `Terminal > New Terminal` para abrir una terminal integrada.
+   - En VSCode, selecciona `Terminal -> New Terminal` para abrir una terminal integrada.
    - Compila el programa ejecutando el siguiente comando en la terminal (genera el ejecutable):
    - En PowerShell, ejecuta los siguientes comandos
    - En la terminal ejecutar (nos genera el ejecutable) = gcc -o tarea1 tarea1.c tdas/list.c tdas/extra.c
