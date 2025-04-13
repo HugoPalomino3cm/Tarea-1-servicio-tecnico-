@@ -28,9 +28,9 @@ Este sistema permite gestionar la atención de clientes en un servicio técnico,
    - Para que empiece a compilar el codigo = `./tarea1`
 
 
-### Uso de programa:
+### Uso del programa:
 
-1) **Registrar cliente nuevo:**
+1) *Registrar cliente nuevo:*
       -Ingresa el ID y la descripción del problema.
       `Puedes registrar varios clientes pero tiene que ser uno por uno.`
 
@@ -47,4 +47,4 @@ Este sistema permite gestionar la atención de clientes en un servicio técnico,
       -Busca un cliente específico por su ID y muestra sus datos.
 
 6) **Salir:**
-      -Finaliza el programa.
+      -`Finaliza el programa.`
