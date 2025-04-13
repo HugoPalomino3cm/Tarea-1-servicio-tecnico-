@@ -1,11 +1,11 @@
 # Tarea-1-servicio-tecnico-
 ## Pasos para compilar y ejecutar el programa
 
-1) Clonar el repositorio desde GitHub:
+### Clonar el repositorio desde GitHub:
     -Asegúrate de tener git instalado.
     -Inicia sesión en tu cuenta de GitHub 
 
-2) Compilar el programa:
+### Compilar el programa:
     -En PowerShell, ejecuta los siguientes comandos
     -En la terminal ejecutar (nos genera el ejecutable) = gcc -o tarea1 tarea1.c tdas/list.c tdas/extra.c
     -Para que el programa muestre correctamente las tildes = $OutputEncoding = [Console]::OutputEncoding = [Text.UTF8Encoding]::new()
@@ -13,7 +13,6 @@
 
 
 ## Funcionalidad del sistema 'Descripción general'
-
 
 Este sistema permite gestionar la atención de clientes en un servicio técnico, priorizando su atención según el nivel de urgencia del problema reportado.
 
