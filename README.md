@@ -17,8 +17,9 @@ Este sistema permite gestionar la atención de clientes en un servicio técnico,
 1. **Clonar el Repositorio en Visual Studio Code (VSCode):**
    - Asegúrate de tener la extensión de Git instalada en VSCode.
    - Haz clic en la pestaña "Source Control" (ícono de Git) en la barra lateral.
-   - Selecciona "Clone Repository" e ingresa la URL del repositorio:  
-     `https://github.com/HugoPalomino3cm/Tarea-1-servicio-tecnico-.git`
+   - Selecciona "Clone Repository" e ingresa la URL del repositorio:
+     ```bash
+        https://github.com/HugoPalomino3cm/Tarea-1-servicio-tecnico-.git
    - Elige una carpeta local para guardar el proyecto y abre la carpeta clonada en VSCode.
 
 2. **Compilar el Programa:**
