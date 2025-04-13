@@ -12,11 +12,11 @@
 4) Para que empiece a compilar el codigo = ./tarea1
 
 
-## Funcionalidad del sistema 'Descripción general'
+### Funcionalidad del sistema 'Descripción general'
 
 Este sistema permite gestionar la atención de clientes en un servicio técnico, priorizando su atención según el nivel de urgencia del problema reportado.
 
-## Funcionalidades principales
+### Funcionalidades principales
 
 1) Registrar cliente nuevo: Agrega un nuevo cliente a la lista de espera con prioridad inicial baja.
 
